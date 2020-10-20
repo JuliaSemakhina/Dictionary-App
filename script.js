@@ -1,86 +1,77 @@
-const addItems = document.querySelector('.add-items');
-const itemsList = document.querySelector('.workouts');
-let items = JSON.parse(localStorage.getItem('items')) || [];
-const deleteAll = document.querySelector('.delete');
-
-//Adding a new workout to a list
-function addItem(e) {
-  e.preventDefault();
-  const text = (this.querySelector('[name=item]')).value;
-  const dist = (this.querySelector('[name=item2]')).value;
-  const hour = (this.querySelector('[name=item3]')).value;
-  const minute = (this.querySelector('[name=item4]')).value;
-  const item = {
-    text,
-    dist,
-    hour,
-    minute,
-    done: false
-  };
-  items.push(item);
-  //Updating a local Storage
-  localStorage.setItem('items', JSON.stringify(items));
-  populateList(items, itemsList);
-
-  //Reseting input values
-  this.reset();
-}
+const search = document.getElementById('searchBox');
+const submitBtn = document.getElementById('submit');
+const otputField = document.getElementById('outputField');
 
 
-//Creating a new list item
-function populateList(activities = [], activitiesList){
-  activitiesList.innerHTML = activities.map((activity, i) => {
-    let convertTime = +activity.hour+(+activity.minute/60);
-    return `
-      <li>
-        <input type="checkbox" data-index=${i} id="item${i}" ${activity.done ? "checked" : ""}></input>
-        <label for="item${i}">${activity.text}</label>
-        <label for="item${i}">${activity.dist} km</label>
-        <label for="item${i}">${activity.hour}h:${activity.minute}m</label> 
-        <label for="item${i}"> ${(+activity.dist/convertTime).toFixed(2)} km/h</label>
-        <button class="erase">X</button>
-      </li>
-    `
-  }).join("");
-}
 
-//Mark a workout completed
-function toggleDone(e){
-  if(!e.target.matches('input')) return;
-  const el = e.target;
-  const ind = el.dataset.index;
-  items[ind].done = !items[ind].done;
-  
-  localStorage.setItem('items', JSON.stringify(items));
-  populateList(items, itemsList);
-}
+function searchWord(){
+  otputField.style.display = 'block';
 
-//Removing the workout from the list
-function removeItem(e){
-  if(!e.target.matches('button')) return;//checking if it is a delete button
+  var word = document.getElementById('word');
+  var definition= document.getElementById('definition');
+  var example = document.getElementById('example');
+  var synonym = document.getElementById('synonym');
+  var spelling = document.getElementById('spelling');
+  var sound = document.getElementById('sound');
 
-  li = e.target.parentElement;
-  let index = Array.prototype.indexOf.call(itemsList.children, li);
+  var inputWord = search.value;
+  var api = 'https://api.wordnik.com/v4/word.json/';
+  var key = 'ag99rn7f4gdd82rlrrcxdd1p6yaxw6hbogitsadptvg5221d8';
 
-  itemsList.removeChild(li);
+if(inputWord){
+  Promise.all([
+    fetch(`${api}${inputWord.trim()}/definitions?limit=10&api_key=${key}`),
+    fetch(`${api}${inputWord.trim()}/examples?includeDuplicates=false&useCanonical=false&limit=10&api_key=${key}`),
+    fetch(`${api}${inputWord.trim()}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${key}`),
+    fetch(`${api}${inputWord.trim()}/audio?useCanonical=false&limit=10&api_key=${key}`)
+    ])
+  .then(function (responses) {
+    return Promise.all(responses.map(function (response) {
+      return response.json();
+    }));
+  })
+  .then(function (data){
+    var i = Math.floor(Math.random()*9);
+      
+      if(data[0].statusCode === 404) {
 
-  removeLocalStorage(index);
-}
+        alert('No such word!');
+        word.innerHTML = inputWord;
+        definition.innerHTML = '';
+        example.innerHTML = '';
+        synonym.innerHTML = '';
 
+      } else {
 
-//Updating a local Storage
-function removeLocalStorage(index){
-  items.splice(index, 1);
-  localStorage.setItem('items', JSON.stringify(items));
+        word.innerHTML = data[0][i].word;
+        definition.innerHTML = data[0][i].text;
+        example.innerHTML = data[1].examples[i].text;
+
+        let list = data[2][0].words
+        synonym.innerHTML = list.map(line=>
+          `<ul>
+          <li>${line}</li>
+          </ul>
+          `
+        ).join('');
+        console.log(list);
+        console.log(data[0][i].text);
+        sound.src = data[3][0].fileUrl;
+      
+      } 
+
+    //Clear search text
+    search.value = '';
+
+    console.log(data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+} else {
+        alert('Please enter a search word');
+      }
 };
-  
-//EventListeners
-addItems.addEventListener('submit', addItem);
-itemsList.addEventListener('click', toggleDone);
-itemsList.addEventListener('click', removeItem);
-deleteAll.addEventListener('click', ()=> {
-  window.localStorage.clear();
-  populateList(items=[], itemsList);
-});
 
-populateList(items, itemsList);
+
+submitBtn.addEventListener('click', searchWord);

@@ -4,68 +4,44 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Training Plan</title>
+	<title>Dictionary</title>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-  <section class="featured">
-      <div class="container">
-        <h2 class="section-title">Your Training Week</h2>
-        
-        <div class="division">
-           <div href="#" class="featured-item">
-            <img src="swim.png" class="featured-img">
-          </div>
-          <div class="featured-item">
-            <img src="run.png" class="featured-img">
-          </div>
-          <div href="#" class="featured-item">
-            <img src="bike.png" class="featured-img">
-          </div>
-        </div>
-      </div>
-    </section>
+ <section class="search-bar">
+    <h1>Dictionary App</h1>
+    <div class="submit-field">
+       <input type="search" name="serchField" id="searchBox" placeholder="Enter a word">
+       <input type="button" name="submit" value="submit" id="submit">
+   </div>
+ </section>
 
-
-  <section>
-    <div class="container">
-      <div class="wrapper">
-      <p class="form-header">Plan your workout for a day</p>
-      <div class="description">
-          <p>Activity</p>
-          <p>Distance</p>
-          <p>Time spent</p>
-          <p>Speed</p>
-      </div>
-      <ul class="workouts">
-        <li>Preparing your plan...</li>
-
-      </ul>
-      
-      <form class="add-items">
-        <select type="text" name="item" placeholder="Choose Distance" required>
-          <option value="Running">Running</option>
-          <option value="Swimming">Swimming</option>
-          <option value="Cycling">Cycling</option>
-          <option value="Hiking">Hiking</option>
-          <option value="Treadmill">Treadmill</option>
-          <option value="Skiing">Skiing</option>
-          <option value="Triathlon">Triathlon</option>
-          <option value="Gym">Gym</option>
-        </select>
-        <input type="number" name="item2" placeholder="Enter the distance" required>
-        <input type="number" name="item3" placeholder="Enter hours"required>
-        <input type="number" name="item4" placeholder="Enter minutes"required>
-        <input class="add" type="submit" value="+ Add Item">
-      </form>
-      <div class="clear">
-      <button class="delete">Clear All</button>
-      </div>
-      </div>
-    </div>
-  </section>
+ <section class="output" id="outputField">
+   <div>
+     <h1>Word you serched for:</h1>
+     <p id="word"></p>
+   </div>
+   <div>
+     <h1>Definition:</h1>
+     <p id="definition"></p>
+   </div>
+   <div>
+     <h1>Example:</h1>
+     <p id="example"></p>
+   </div>
+   <div>
+     <h1>Synonyms:</h1>
+     <p id="synonym"></p>
+   </div>
+   <div>
+     <h1>Pronounciation:</h1>
+     <p id="spelling">
+       <audio id="sound" controls="controls"></audio>
+     </p>
+   </div>
+ </section>
 </main>
 	<script defer src="script.js" defer></script>
 </body>
