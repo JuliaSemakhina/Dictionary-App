@@ -8,22 +8,25 @@ function searchWord(){
   otputField.style.display = 'block';
 
   var word = document.getElementById('word');
+  var speech = document.getElementById('speech');
   var definition= document.getElementById('definition');
   var example = document.getElementById('example');
   var synonym = document.getElementById('synonym');
   var spelling = document.getElementById('spelling');
   var sound = document.getElementById('sound');
 
-  var inputWord = search.value;
+  var inputWord = search.value.trim().toLowerCase();
   var api = 'https://api.wordnik.com/v4/word.json/';
   var key = 'ag99rn7f4gdd82rlrrcxdd1p6yaxw6hbogitsadptvg5221d8';
 
 if(inputWord){
+
   Promise.all([
-    fetch(`${api}${inputWord.trim()}/definitions?limit=10&api_key=${key}`),
-    fetch(`${api}${inputWord.trim()}/examples?includeDuplicates=false&useCanonical=false&limit=10&api_key=${key}`),
-    fetch(`${api}${inputWord.trim()}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${key}`),
-    fetch(`${api}${inputWord.trim()}/audio?useCanonical=false&limit=10&api_key=${key}`)
+
+    fetch(`${api}${inputWord}/definitions?limit=10&includeRelated=true&sourceDictionaries=all&useCanonical=true&includeTags=false&api_key=${key}`),
+    fetch(`${api}${inputWord}/examples?includeDuplicates=false&useCanonical=true&limit=10&api_key=${key}`),
+    fetch(`${api}${inputWord}/relatedWords?useCanonical=true&relationshipTypes=synonym&limitPerRelationshipType=10&api_key=${key}`),
+    fetch(`${api}${inputWord}/audio?useCanonical=true&limit=10&api_key=${key}`)
     ])
   .then(function (responses) {
     return Promise.all(responses.map(function (response) {
@@ -40,28 +43,41 @@ if(inputWord){
         definition.innerHTML = '';
         example.innerHTML = '';
         synonym.innerHTML = '';
-
+        search.value = '';
       } else {
-
         word.innerHTML = data[0][i].word;
-        definition.innerHTML = data[0][i].text;
+
+        //Choosing correct article before part of speech
+        var vowelRegex = '^[aeiou].*i';
+        if (data[0][i].partOfSpeech){
+          var partSpeech = data[0][i].partOfSpeech;
+        partSpeech.match(vowelRegex) ? speech.innerHTML = `(an ${partSpeech})` : speech.innerHTML = `(a ${partSpeech})`;
+        } else {
+          speech.innerHTML = '';
+        }
+        
+
+        if (data[0][i].text){
+          definition.innerHTML = data[0][i].text
+        } else {
+          definition.innerHTML = 'Not Found'
+        }
+
+
         example.innerHTML = data[1].examples[i].text;
 
-        let list = data[2][0].words
-        synonym.innerHTML = list.map(line=>
+        data[2].statusCode === 404 ? synonym.innerHTML = 'No synonyms' : synonym.innerHTML = data[2][0].words.map(line=>
           `<ul>
           <li>${line}</li>
           </ul>
           `
         ).join('');
-        console.log(list);
-        console.log(data[0][i].text);
-        sound.src = data[3][0].fileUrl;
-      
-      } 
 
-    //Clear search text
-    search.value = '';
+        data[3].statusCode === 404 ? sound.src = '' : sound.src = data[3][0].fileUrl;
+
+        //Clear search text
+        search.value = '';
+      } 
 
     console.log(data);
   })
