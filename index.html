@@ -10,13 +10,22 @@
 </head>
 <body>
 <main>
- <section class="search-bar">
+<div class="header">
+ <div class="search-bar">
     <h1>Dictionary App</h1>
-    <div class="submit-field">
-       <input type="search" name="serchField" id="searchBox" placeholder="Enter a word">
-       <input type="button" name="submit" value="submit" id="submit">
-   </div>
- </section>
+      <div class="submit-field">
+         <input type="search" 
+         name="serchField" 
+         id="searchBox" 
+         placeholder="enter a word" 
+         class="search-bar__input" aria-label="search">
+         <button id="submit" 
+         class="search-bar__submit">
+         <i class="fas fa-search" aria-label="submit search"></i>
+          </button>
+    </div>
+  </div>
+ </div>
 
  <section class="output" id="outputField">
    <div>
@@ -32,9 +41,9 @@
      <h1>Example:</h1>
      <p id="example"></p>
    </div>
-   <div>
+   <div >
      <h1>Synonyms:</h1>
-     <p id="synonym"></p>
+       <div class="synonyms" id="synonym"></div>
    </div>
    <div>
      <h1>Pronounciation:</h1>

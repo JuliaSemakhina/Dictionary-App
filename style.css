@@ -3,12 +3,11 @@
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  line-height: 1.6;
   font-family: 'Sora', sans-serif;
 }
 
@@ -18,19 +17,157 @@ section {
   flex-direction: column;
 }
 
+.header {
+  background: url(./book.jpg) center no-repeat;
+  background-size: cover;
+  height: 50vh;
+}
+
+.search-bar {
+  width: 70vw;
+  padding: 3em;
+  margin: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
 .search-bar h1 {
   font-size: 2rem;
   padding: 0;
   margin: 20px 15px;
   font-weight: 400;
+  text-align: center;
+  color: #006a44;
 }
 
-.search-bar input[type=search] {
-  min-width: 400px;
-  min-height: 25px;
+.submit-field {
+  display: flex;
+  height: 60px;
+  width: 60px;
+  padding: 3px;
+  border: 2px solid   rgb(193, 39, 45);
+  border-radius: 100vh;
+  position: relative;
+  transition: width 500ms cubic-bezier(.18, .89, .32, 1.12);
+  overflow: hidden;
+}
+
+.submit-field:focus-within {
+  width: 100%;
+}
+
+.submit-field:focus-within .search-bar__submit{
+  background: rgb(193, 39, 45);
+  color: #fff;
+}
+
+.submit-field:focus-within .search-bar__input{
+  opacity: 1;
+  cursor: initial;
+  background: transparent;
+  width: calc(100%-60px);
+}
+
+.submit-field:focus-within .search-bar__submit:focus,
+.submit-field:focus-within .search-bar__submit:hover
+ {
+  outline: 0;
+  box-shadow: 0 0 10px rgba(0,0,0, .35);
+}
+
+.search-bar__input{
+  flex-grow: 1;
   font-size: 1.5rem;
+  padding: 0 .5em;
+  border: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  line-height: calc(60px - 3px);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.search-bar__input:focus {
+  outline: 0;
+}
+
+
+.search-bar__submit{
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  width: calc(60px - 10px);
+  height: calc(60px - 10px);
+  margin-left: auto;
+  transition: all 150ms ease-in-out;
 }
 
 section.output {
   display: none;
+  padding: 1.5rem;
+  width: 65vw;
+  margin: auto;
+}
+
+.output h1 {
+  color: #006a44;
+}
+
+p#speech {
+  font-style: italic;
+}
+
+.synonyms {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr);
+}
+
+/*
+#sound {
+  background-color: lightblue;
+}*/
+
+@media (max-width: 700px) {
+
+  .search-bar {
+    width: 95vw;
+  }
+
+  .search-bar__input, .search-bar__submit {
+    font-size: .9rem;
+  }
+
+  .submit-field {
+    height: 45px;
+    width: 45px;
+  }
+
+  .search-bar__submit {
+    width: calc(45px - 10px);
+    height: calc(45px - 10px);
+  }
+
+  .submit-field:focus-within .search-bar__input{
+    width: calc(100%-45px);
+  }
+
+  .search-bar h1 {
+    font-size: 1.5rem;
+  }
+
+  section.output {
+    font-size: 1rem;
+    padding: 0.85rem;
+    width: 95vw;
+  }
+
+  .synonyms {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
 }

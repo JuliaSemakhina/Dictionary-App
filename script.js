@@ -44,6 +44,7 @@ if(inputWord){
         example.innerHTML = '';
         synonym.innerHTML = '';
         search.value = '';
+        speech.innerHTML = '';
       } else {
         word.innerHTML = data[0][i].word;
 
@@ -86,6 +87,7 @@ if(inputWord){
   })
 } else {
         alert('Please enter a search word');
+        otputField.style.display = 'none';
       }
 };
 
