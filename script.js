@@ -57,22 +57,16 @@ if(inputWord){
           speech.innerHTML = '';
         }
         
-
         if (data[0][i].text){
           definition.innerHTML = data[0][i].text
         } else {
           definition.innerHTML = 'Not Found'
         }
 
-
         example.innerHTML = data[1].examples[i].text;
 
-        data[2].statusCode === 404 ? synonym.innerHTML = 'No synonyms' : synonym.innerHTML = data[2][0].words.map(line=>
-          `<ul>
-          <li>${line}</li>
-          </ul>
-          `
-        ).join('');
+        data[2].statusCode === 404 ? synonym.innerHTML = 'No synonyms' : synonym.innerHTML = data[2][0].words.map(line=> `<li>${line}</li>`
+          ).join('');
 
         data[3].statusCode === 404 ? sound.src = '' : sound.src = data[3][0].fileUrl;
 

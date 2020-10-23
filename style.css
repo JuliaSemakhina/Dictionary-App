@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&family=Sora:wght@100;300;400&display=swap');
 
 *,
 *::before,
@@ -8,19 +8,20 @@
 
 body {
   margin: 0;
-  font-family: 'Sora', sans-serif;
 }
 
 section {
   display: flex;
   align-items: center;
   flex-direction: column;
+  font-family: 'Poppins', sans-serif;
 }
 
 .header {
-  background: url(./book.jpg) center no-repeat;
+  background: url(./book.jpg) center;
   background-size: cover;
   height: 50vh;
+  font-family: 'Sora', sans-serif;
 }
 
 .search-bar {
@@ -124,15 +125,27 @@ p#speech {
 
 .synonyms {
   display: grid;
-  grid-template-columns: repeat(4, 2fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
-/*
-#sound {
-  background-color: lightblue;
-}*/
+ul {
+  list-style: none;
+}
 
-@media (max-width: 700px) {
+ul li::before {
+  content: "\2022";
+  color: #006a44;
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+audio {
+  outline: none;
+}
+
+@media (max-width: 860px) {
 
   .search-bar {
     width: 95vw;
@@ -161,7 +174,7 @@ p#speech {
   }
 
   section.output {
-    font-size: 1rem;
+    font-size: .9rem;
     padding: 0.85rem;
     width: 95vw;
   }
